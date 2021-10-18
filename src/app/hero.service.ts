@@ -14,19 +14,43 @@ export class HeroService {
     private httpClient: HttpClient
   ) {}
 
+  private heroesUrl = 'api/heroes'; // URL to web api
+
+  httpOptions = {
+    headers: new HttpHeaders({ 'Content-Type': 'application/json' }),
+  };
+
   getHeroes(): Observable<Hero[]> {
     //Reading from local file
-    const heroes = of(HEROES);
-    this.messageService.add('HeroService: fetched heroes');
+    //const heroes = of(HEROES);
+
+    //Reading from in memonery web api
+    const heroes = this.httpClient.get<Hero[]>(this.heroesUrl);
+    this.log('HeroService: fetched heroes');
     return heroes;
 
-    //Reading from server
+    //Reading from express server
     //return this.httpClient.get<Hero[]>('http://localhost:3000/heroes');
   }
 
   getHero(id: number): Observable<Hero> {
-    const hero = HEROES.find((h) => h.id === id)!;
-    this.messageService.add(`HeroService: fetched hero id=${id}`);
-    return of(hero);
+    //Reading from local file
+    //const hero = HEROES.find((h) => h.id === id)!;
+    //this.log(`fetched hero id=${id}`);
+    //return of(hero);
+
+    //api/heroesUrl/id
+    //Reading from in memonery web api
+    const url = `${this.heroesUrl}/${id}`;
+    return this.httpClient.get<Hero>(url);
+  }
+
+  /** Log a HeroService message with the MessageService */
+  private log(message: string) {
+    this.messageService.add(`HeroService: ${message}`);
+  }
+
+  addHero(hero: Hero): Observable<Hero> {
+    return this.httpClient.post<Hero>(this.heroesUrl, hero, this.httpOptions);
   }
 }
