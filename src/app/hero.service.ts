@@ -53,4 +53,8 @@ export class HeroService {
   addHero(hero: Hero): Observable<Hero> {
     return this.httpClient.post<Hero>(this.heroesUrl, hero, this.httpOptions);
   }
+
+  //added a new comment just to test branching
+  //added a new comment just to test branching #1
+  //added a new comment just to test branching #2
 }
