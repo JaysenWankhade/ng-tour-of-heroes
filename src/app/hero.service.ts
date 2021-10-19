@@ -55,4 +55,5 @@ export class HeroService {
   }
 
   //added a new comment just to test branching
+  //added a new comment just to test branching #1
 }
